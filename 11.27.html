@@ -1,0 +1,144 @@
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3533
+Server version: 5.6.17 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2014, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database shop;
+Query OK, 1 row affected (0.03 sec)
+
+mysql> use shop;
+Database changed
+mysql> create table commodity(
+-> id int(11) not null auto_increment primary key,
+-> name varchar(20) not null,
+-> price int(11) not null,
+-> type varchar(20) not null,
+-> number int(11) not null
+-> )engine=innodb default charset=utf8;
+Query OK, 0 rows affected (0.60 sec)
+
+mysql> create table style(
+-> id int(11) not null auto_increment primary key,
+-> designation varchar(20) not null,
+-> order varchar(50) not null
+-> )engine=innodb default charset=utf8;
+ERROR 1064 (42000): Erreur de syntaxe près de 'order varchar(50) not null
+)engine=innodb default charset=utf8' à la ligne 4
+mysql> create table style(
+-> id int(11) not null auto_increment primary key,
+-> designation varchar(20) not null,
+-> order varchar(20) not null
+-> )engine=innodb default charset=utf8;
+ERROR 1064 (42000): Erreur de syntaxe près de 'order varchar(20) not null
+)engine=innodb default charset=utf8' à la ligne 4
+mysql> create table leixing(
+-> id int(11) not null auto_increment primary key,
+-> designation varchar(20) not null,
+-> paixu varchar(20) not null
+-> )engine=innodb default charset=utf8;
+Query OK, 0 rows affected (0.24 sec)
+
+mysql> create table dingdan(
+-> id int(11) not null auto_increment primary key,
+-> spid int(11) not null,
+-> shuliang int(11) not null
+-> )engine=innodb default charset=utf8;
+Query OK, 0 rows affected (0.27 sec)
+
+mysql> insert into commodity(id,name,price,type,number)values(1,"苹果",1.5,"水果",100),(2,"水杯",80,"生活用品",20),(3,"牛奶",6,"饮品"，150);
+ERROR 1064 (42000): Erreur de syntaxe près de '，150)' à la ligne 1
+mysql> insert into commodity(id,name,price,type,number)values(1,"苹果",1.5,"水果",100),(2,"水杯",80,"生活用品",20),(3,"牛奶",6,"饮品"，60);
+ERROR 1064 (42000): Erreur de syntaxe près de '，60)' à la ligne 1
+mysql> insert into commodity(id,name,price,type,number)values(1,"苹果",1.5,"水果",100),(2,"水杯",80,"生活用品",20),(3,"牛奶",6,"饮品",60);
+Query OK, 3 rows affected (0.09 sec)
+Enregistrements: 3  Doublons: 0  Avertissements: 0
+
+mysql> insert into commodity(id,name,price,type,number)values(4,"葡萄",5,"水果",50);
+Query OK, 1 row affected (0.07 sec)
+
+mysql> select * from commodity;
++----+------+-------+----------+--------+
+| id | name | price | type     | number |
++----+------+-------+----------+--------+
+|  1 | 苹果 |     2 | 水果     |    100 |
+|  2 | 水杯 |    80 | 生活用品 |     20 |
+|  3 | 牛奶 |     6 | 饮品     |     60 |
+|  4 | 葡萄 |     5 | 水果     |     50 |
++----+------+-------+----------+--------+
+4 rows in set (0.05 sec)
+
+mysql> select avg(price) as avgprice from commodity;
++----------+
+| avgprice |
++----------+
+|  23.2500 |
++----------+
+1 row in set (0.11 sec)
+
+mysql> select avg(type="水果") as avgshuiguo from commodity;
++------------+
+| avgshuiguo |
++------------+
+|     0.5000 |
++------------+
+1 row in set (0.05 sec)
+
+mysql> select * from commodity;
++----+------+-------+----------+--------+
+| id | name | price | type     | number |
++----+------+-------+----------+--------+
+|  1 | 苹果 |     2 | 水果     |    100 |
+|  2 | 水杯 |    80 | 生活用品 |     20 |
+|  3 | 牛奶 |     6 | 饮品     |     60 |
+|  4 | 葡萄 |     5 | 水果     |     50 |
++----+------+-------+----------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select id,count(*) as number from commodity group by type;
++----+--------+
+| id | number |
++----+--------+
+|  1 |      2 |
+|  2 |      1 |
+|  3 |      1 |
++----+--------+
+3 rows in set (0.00 sec)
+
+mysql> select * from commodity where type="水果";
++----+------+-------+------+--------+
+| id | name | price | type | number |
++----+------+-------+------+--------+
+|  1 | 苹果 |     2 | 水果 |    100 |
+|  4 | 葡萄 |     5 | 水果 |     50 |
++----+------+-------+------+--------+
+2 rows in set (0.00 sec)
+
+mysql>  select * from commodity where type="水果" as sg;
+ERROR 1064 (42000): Erreur de syntaxe près de 'as sg' à la ligne 1
+mysql> select avg(price) as sgavg from type="水果";
+ERROR 1064 (42000): Erreur de syntaxe près de '"水果"' à la ligne 1
+mysql> select * from commodity as sgavg where type="水果";
++----+------+-------+------+--------+
+| id | name | price | type | number |
++----+------+-------+------+--------+
+|  1 | 苹果 |     2 | 水果 |    100 |
+|  4 | 葡萄 |     5 | 水果 |     50 |
++----+------+-------+------+--------+
+2 rows in set (0.00 sec)
+
+mysql> select avg(price) as sgavgprice from sgavg;
+ERROR 1146 (42S02): La table 'shop.sgavg' n'existe pas
+mysql> select avg(price) from sgavg;
+ERROR 1146 (42S02): La table 'shop.sgavg' n'existe pas
+mysql> select avg(price) as pingjunjia from sgavg;
+ERROR 1146 (42S02): La table 'shop.sgavg' n'existe pas
+mysql>
+
